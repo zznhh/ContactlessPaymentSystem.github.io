@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contactless Payment</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Contactless Payment System</h1>
+        <div id="item-details">
+            <p><strong>Item:</strong> <span id="item-name">-</span></p>
+            <p><strong>Price:</strong> RM<span id="item-price">0.00</span></p>
+            <p><strong>Discount:</strong> 10%</p>
+            <button onclick="applyDiscount()">Claim Voucher</button>
+        </div>
+
+        <div id="payment-details" style="display:none;">
+            <p><strong>Discounted Price:</strong> RM<span id="discounted-price">0.00</span></p>
+            <h3>Select Payment Method</h3>
+            <button onclick="choosePaymentMethod('Credit Card')">Credit Card</button>
+            <button onclick="choosePaymentMethod('Cash')">Cash</button>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
