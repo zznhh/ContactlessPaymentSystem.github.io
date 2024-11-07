@@ -3,27 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contactless Payment</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Contactless Payment System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f5f5f5;
+        }
+        #item-details {
+            text-align: center;
+            padding: 20px;
+            border: 1px solid #ddd;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            border-radius: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            margin-top: 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+    <script>
+        // Function to get query parameters from URL
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+
+        // Define your item data
+        const items = {
+            "clothesA": { name: "Clothes A", price: "RM25", discount: "10%" },
+            "clothesB": { name: "Clothes B", price: "RM38", discount: "15%" },
+            "pantsC": { name: "Pants C", price: "RM20", discount: "5%" },
+            "pantsD": { name: "Pants D", price: "RM30", discount: "8%" },
+            "comboE": { name: "Combo E", price: "RM80", discount: "20%" }
+        };
+
+        // Get the item from URL
+        const itemKey = getQueryParam('item');
+
+        // Display item details if it exists
+        window.onload = function() {
+            const itemContainer = document.getElementById('item-details');
+            
+            if (itemKey && items[itemKey]) {
+                const item = items[itemKey];
+                itemContainer.innerHTML = `
+                    <h2>${item.name}</h2>
+                    <p>Price: ${item.price}</p>
+                    <p>Discount: ${item.discount}</p>
+                    <button onclick="applyVoucher()">Claim Voucher</button>
+                `;
+            } else {
+                itemContainer.innerHTML = "<p>Item not found.</p>";
+            }
+        };
+
+        function applyVoucher() {
+            alert("Voucher applied for " + items[itemKey].name);
+            // Here, you could also add functionality to update the displayed price or apply the discount.
+        }
+    </script>
 </head>
 <body>
-    <div class="container">
-        <h1>Contactless Payment System</h1>
-        <div id="item-details">
-            <p><strong>Item:</strong> <span id="item-name">-</span></p>
-            <p><strong>Price:</strong> RM<span id="item-price">0.00</span></p>
-            <p><strong>Discount:</strong> 10%</p>
-            <button onclick="applyDiscount()">Claim Voucher</button>
-        </div>
-
-        <div id="payment-details" style="display:none;">
-            <p><strong>Discounted Price:</strong> RM<span id="discounted-price">0.00</span></p>
-            <h3>Select Payment Method</h3>
-            <button onclick="choosePaymentMethod('Credit Card')">Credit Card</button>
-            <button onclick="choosePaymentMethod('Cash')">Cash</button>
-        </div>
-    </div>
-
-    <script src="app.js"></script>
+    <div id="item-details"></div>
 </body>
 </html>
+
