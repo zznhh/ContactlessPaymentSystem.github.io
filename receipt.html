@@ -4,33 +4,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Receipt</title>
-    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f9f9f9;
+        }
+        #receipt-container {
+            text-align: center;
+            padding: 20px;
+            border: 1px solid #ddd;
+            background-color: #fff;
+            width: 300px;
+            border-radius: 10px;
+        }
+        h2 {
+            color: #333;
+        }
+    </style>
+    <script>
+        window.onload = function() {
+            // Retrieve receipt data from local storage
+            const receiptData = JSON.parse(localStorage.getItem('receiptData'));
+            if (receiptData) {
+                document.getElementById('receipt-container').innerHTML = `
+                    <h2>Payment Receipt</h2>
+                    <p>Item: ${receiptData.itemName}</p>
+                    <p>Price: RM${receiptData.finalPrice}</p>
+                    <p>Date: ${receiptData.date}</p>
+                    <p>Thank you for your purchase!</p>
+                `;
+                // Clear the stored receipt data after displaying
+                localStorage.removeItem('receiptData');
+            } else {
+                document.getElementById('receipt-container').innerHTML = "<p>No receipt data found.</p>";
+            }
+        };
+    </script>
 </head>
 <body>
-    <div class="container">
-        <h1>Payment Receipt</h1>
-        <div id="receipt-details">
-            <p><strong>Item:</strong> <span id="receipt-item">-</span></p>
-            <p><strong>Total Paid:</strong> RM<span id="receipt-price">0.00</span></p>
-            <p><strong>Payment Method:</strong> <span id="receipt-method">-</span></p>
-        </div>
-        <button onclick="goBack()">Go Back</button>
-    </div>
-
-    <script>
-        const paymentData = JSON.parse(localStorage.getItem('paymentData'));
-
-        if (paymentData) {
-            document.getElementById("receipt-item").textContent = paymentData.itemName;
-            document.getElementById("receipt-price").textContent = paymentData.price;
-            document.getElementById("receipt-method").textContent = paymentData.method;
-        } else {
-            alert("No payment data found. Please return to the main page.");
-        }
-
-        function goBack() {
-            window.location.href = 'index.html';
-        }
-    </script>
+    <div id="receipt-container"></div>
 </body>
 </html>
