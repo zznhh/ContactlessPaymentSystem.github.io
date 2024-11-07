@@ -7,13 +7,12 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: #f5f5f5;
+            margin: 0;
+            background-color: #f9f9f9;
         }
         #item-details {
             text-align: center;
@@ -36,6 +35,9 @@
         button:hover {
             background-color: #0056b3;
         }
+        .hidden {
+            display: none;
+        }
     </style>
     <script>
         // Function to get query parameters from URL
@@ -44,38 +46,63 @@
             return urlParams.get(param);
         }
 
-        // Define your item data
+        // Item data with name, original price, and discount percentage
         const items = {
-            "clothesA": { name: "Clothes A", price: "RM25", discount: "10%" },
-            "clothesB": { name: "Clothes B", price: "RM38", discount: "15%" },
-            "pantsC": { name: "Pants C", price: "RM20", discount: "5%" },
-            "pantsD": { name: "Pants D", price: "RM30", discount: "8%" },
-            "comboE": { name: "Combo E", price: "RM80", discount: "20%" }
+            "clothesA": { name: "Clothes A", price: 25, discount: 10 },
+            "clothesB": { name: "Clothes B", price: 38, discount: 15 },
+            "pantsC": { name: "Pants C", price: 20, discount: 5 },
+            "pantsD": { name: "Pants D", price: 30, discount: 8 },
+            "comboE": { name: "Combo E", price: 80, discount: 20 }
         };
 
-        // Get the item from URL
+        // Get item key from URL query
         const itemKey = getQueryParam('item');
 
-        // Display item details if it exists
+        // Display item details and handle claim voucher and payment process
         window.onload = function() {
             const itemContainer = document.getElementById('item-details');
             
             if (itemKey && items[itemKey]) {
                 const item = items[itemKey];
+                const discountedPrice = item.price * (1 - item.discount / 100);
+
+                // Display item information
                 itemContainer.innerHTML = `
                     <h2>${item.name}</h2>
-                    <p>Price: ${item.price}</p>
-                    <p>Discount: ${item.discount}</p>
-                    <button onclick="applyVoucher()">Claim Voucher</button>
+                    <p>Original Price: RM${item.price.toFixed(2)}</p>
+                    <p>Discounted Price: RM${discountedPrice.toFixed(2)} (${item.discount}% off)</p>
+                    <button onclick="showPaymentOptions()">Claim Voucher & Proceed to Payment</button>
+                    <div id="payment-options" class="hidden">
+                        <h3>Select Payment Method</h3>
+                        <button onclick="generateReceipt('${item.name}', ${discountedPrice})">Credit Card</button>
+                        <button onclick="generateReceipt('${item.name}', ${discountedPrice})">PayPal</button>
+                        <button onclick="generateReceipt('${item.name}', ${discountedPrice})">Cash</button>
+                    </div>
                 `;
             } else {
                 itemContainer.innerHTML = "<p>Item not found.</p>";
             }
         };
 
-        function applyVoucher() {
-            alert("Voucher applied for " + items[itemKey].name);
-            // Here, you could also add functionality to update the displayed price or apply the discount.
+        // Function to show payment options after voucher is claimed
+        function showPaymentOptions() {
+            document.getElementById('payment-options').classList.remove('hidden');
+            alert("Voucher applied. Select your payment method.");
+        }
+
+        // Function to generate receipt and navigate to the receipt page
+        function generateReceipt(itemName, finalPrice) {
+            const receiptData = {
+                itemName: itemName,
+                finalPrice: finalPrice.toFixed(2),
+                date: new Date().toLocaleString()
+            };
+
+            // Save receipt data to local storage (simulate passing data to another page)
+            localStorage.setItem('receiptData', JSON.stringify(receiptData));
+
+            // Redirect to receipt page
+            window.location.href = "receipt.html";
         }
     </script>
 </head>
@@ -83,4 +110,5 @@
     <div id="item-details"></div>
 </body>
 </html>
+
 
